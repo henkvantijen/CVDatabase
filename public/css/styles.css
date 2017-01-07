@@ -1,0 +1,25 @@
+@charset "utf-8";
+/* CSS Document */
+
+html, body{}
+
+#wrapper{
+	 width:840px;
+	 display:block;
+	 margin:auto;
+}
+
+nav {
+	display:block;
+}
+
+nav ul{
+	list-style-type:none;
+	display:inline;
+}
+
+nav a {
+	text-decoration:none;
+	float:left;
+	padding:0 10px 0 10px;
+}

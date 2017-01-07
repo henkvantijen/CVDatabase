@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport"    content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mojolicous based sample web-app">
+
+
+    <title>CVDatabase - CV Database</title>
+
+
+<!-- link rel="stylesheet" type="text/css" href="/csss/tacit.min.csss"/ -->
+
+<link rel="stylesheet" type="text/css" href="/css/pure.css">
+
+<link rel="stylesheet" type="text/css" href="/css/pure-extras.css">
+
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="/combo/1.18.13?/css/layouts/side-menu-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/side-menu.1.18.13.css">
+    <!--<![endif]-->
+
+<!--[if lt IE 9]>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+<![endif]-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!-- link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<script src="/js/jquery.pjax.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.min.css" />
+
+
+<style>
+  <!-- input, select { display: inline; }  -->
+</style>
+
+</head>
+
+<body>
+
+
+
+<div id="layout">
+
+
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+
+        % if (session 'name') {
+            <a class="pure-menu-heading" href="/">CV Database</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="/home/search" class="pure-menu-link">Search</a></li>
+
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Actors</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Profile</a></li>
+                <li class="pure-menu-item"><a href="/basket/view" class="pure-menu-link">Basket</a></li>
+
+                <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
+                    <a href="#" class="pure-menu-link">Settings</a>
+                </li>
+                % if (session 'admin') {
+                <li class="pure-menu-item"><a href="/admin/users" class="pure-menu-link">Users</a></li>
+                % }
+                <li class="pure-menu-item"><a href="/logout" class="pure-menu-link">Logout</a></li>
+
+                <li><button class="pure-button">  <i class="fa fa-cog"></i>  Settings  </button> </li>
+
+              </ul>
+        % } else {
+                    <a class="pure-menu-heading" href="/">CV Database</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="/home/search" class="pure-menu-link">Search</a></li>
+
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Actors</a></li>
+                 <li class="pure-menu-item"><a href="/about" class="pure-menu-link">About</a></li>
+
+                <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
+                    <a href="/contact" class="pure-menu-link">Contact</a>
+                </li>
+
+                <li class="pure-menu-item"><a href="/login" class="pure-menu-link">Login</a></li>
+              </ul>
+        % }
+
+        </div>
+    </div>
+
+
+
+
+    <div id="main">
+
+% if (session 'name') {
+ <a href="/user/<%= session 'name' %>">My Home Page</a> |	<%# = $page_caption %>
+% } else {
+	<a href="/login">Sign-In</a> or <a href='/join'>Join us!</a>
+% }
+
+<hr>
+      <div class="pure-alert pure-alert-warning" >
+   % if (my $message = flash 'message') {
+      <h4><b>FLASH: <%= $message %></b></h4>
+   % }
+     Post_message: <%= stash 'post_message' %>
+     </div>
+ 
+   <%= flash 'message'  %>
+
+     <div class="content">
+
+        <%= content %>
+        <div id="container">
+           
+        </div>
+
+    </div>
+    <hr/> <!-- ---- -->
+
+    %# if (session 'name') {
+    %#  user: <%= session 'name' %>  or  <%= loggedin_user->user_name %> or  <%= loggedin_user_name %>
+    %# }
+
+</div>
+
+<script>
+
+$(document).on('pjax:send', function() {
+  $('#loading').show()
+})
+$(document).on('pjax:complete', function() {
+  $('#loading').hide()
+})
+
+</script>
+
+
+<script src="/js/ui.1.18.3.js"></script>
+
+
+</body>
+</html>

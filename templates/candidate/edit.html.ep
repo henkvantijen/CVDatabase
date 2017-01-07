@@ -1,0 +1,90 @@
+% layout 'default';
+% title 'Candidate Wijzig';
+% my $cand   = stash 'cand';
+% my $errors = stash 'errors';
+
+<h2>
+%# <%= $msg %>
+</h2>
+
+% if ($cand) {
+  % param 'last_job_title' => $cand->last_job_title unless param 'last_job_title';
+  % param 'skills'         => $cand->skills         unless param 'skills';
+  % param 'first_names'    => $cand->first_names    unless param 'first_names';
+
+
+	% if (scalar @$errors > 0) {
+	<div class="pure-alert pure-alert-error" >
+	 ERRORS:
+	 <ul>
+	 <li>
+	%== join ("<li>" , @$errors );
+	 </ul>
+	 </div
+    % } 
+
+%};
+
+<h2> # <%= $cand->id %> </h2>
+
+
+%= form_for 'edit' => (method => 'POST') => (class => "pure-form pure-form-aligned" ) => begin
+    <fieldset>
+    
+      <div class="pure-control-group">
+        <label for="name">Voornaam(en)</label>
+        %= text_field 'first_names' => (placeholder => 'als in paspoort') => (size => 50)
+      </div>
+  
+      <div class="pure-control-group">
+        <label for="name">Recentste functie</label>
+        %= text_field 'last_job_title' => (placeholder => 'recentste functie') => (size => 50)
+      </div>
+  
+      <div class="pure-control-group">
+        <label for="name">Skills</label>
+        %= text_area 'skills' => (cols => 50) => (placeholder => 'skills \(komma gescheiden\)')
+      </div>    
+      
+      
+      <div class="pure-control-group">
+        <label for="name">Introductie</label>
+        %= text_area 'introduction' => (cols => 50) => (rows => 10) => (placeholder => 'Korte intro in ik-vorm') 
+      </div>    
+
+ <div class="pure-control-group">
+      <div>
+        <label for="name">Geboorte dag</label>
+        %= number_field 'birth_day_of_month' , placeholder => '1..31' , max => '31', style => 'width: 4em; display: inline;'
+ <div>       
+        <label for="name"> maand</label>
+        %= number_field 'birth_month' , placeholder => '1..12' , max => '12' , style => 'width: 4em; display: inline;'
+      <div>  
+        <label for="name"> jaar</label>
+        %= number_field 'birth_year' , placeholder => 'yyyy' , max => '2050', style => 'width: 5em; display: inline;'
+       </div> 
+      </div>    
+  
+
+ 
+      <div class="pure-control-group">
+          <button type="submit" class="pure-button pure-button-primary">Bewaar</button>
+      </div>
+      
+      
+      
+    </fieldset>
+ 
+ 
+ 
+ 
+ 
+
+
+<!--  => (class => "pure-button pure-button-primary")  -->
+% end
+
+<hr>
+created on: <%= $cand->created_on %> <br>
+modified on : <%= $cand->created_on %> 
+

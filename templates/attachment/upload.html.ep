@@ -1,0 +1,65 @@
+% layout 'default';
+% title 'Attachment';
+% my $attachment   = stash 'attachment';
+% my $errors = stash 'errors';
+
+<h2>
+%# <%= $msg %>
+</h2>
+
+% if ($attachment) {
+  % param 'kind' => $attachment->kind unless param 'kind';
+  % param 'comment'         => $attachment->comment         unless param 'comment';
+  
+
+	% if (scalar @$errors > 0) {
+	<div class="pure-alert pure-alert-error" >
+	 ERRORS:
+	 <ul>
+	 <li>
+	%== join ("<li>" , @$errors );
+	 </ul>
+	 </div
+    % } 
+
+%};
+
+<h2> # <%= $attachment->id %> </h2>
+
+
+%= form_for 'upload' => (method => 'post') => (enctype => 'multipart/form-data') => (class => "pure-form pure-form-aligned" ) => begin
+    <fieldset>
+    
+      <div class="pure-control-group">
+        <label for="name">Soort</label>
+        %= text_field 'kind' => (placeholder => 'soort document') => (size => 50)
+      </div>
+  
+      <div class="pure-control-group">
+        <label for="comment">Notitie</label>
+        %= text_field 'comment' => (placeholder => '\(niet verplicht\)') => (size => 50)
+      </div>
+
+     <div class="pure-control-group">
+        <label for="comment">Document</label>
+      %= file_field 'doc_upload'
+      </div>
+      
+      
+      
+      <div class="pure-control-group">
+          <button type="submit" class="pure-button pure-button-primary">Upload</button>
+      </div>
+      
+      
+    </fieldset>
+ 
+ 
+ 
+% end   
+% #form
+
+<hr>
+created on: <%= $attachment->created_on %> <br>
+modified on : <%= $attachment->created_on %> 
+

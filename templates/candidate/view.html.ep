@@ -1,0 +1,18 @@
+% layout 'default';
+% title 'Candidate';
+<h2><%= $msg %></h2>
+
+
+First (given) names: <%= $cand->first_names %>
+<p>
+
+Job Title; <%= $cand->last_job_title %>
+<p>
+
+Skills: <%= $cand->skills %>
+<p>
+
+
+
+
+<%= link_to 'here' => '/perldoc' %>.
