@@ -1,5 +1,5 @@
 package CVDatabase::Controller::Candidate;
-use Mojo::Base 'CVDatabase::Controller';
+use Mojo::Base 'Mojolicious::Controller';
 
 use CVDatabase::Model::Candidate;
 

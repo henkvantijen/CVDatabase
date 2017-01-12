@@ -1,0 +1,125 @@
+PRAGMA synchronous = OFF;
+PRAGMA journal_mode = MEMORY;
+BEGIN TRANSACTION;
+CREATE TABLE `attachment` (
+  `id` integer  NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `is_active` integer  NOT NULL DEFAULT '1'
+,  `is_deleted` integer  NOT NULL DEFAULT '0'
+,  `created_on` timestamp NOT NULL 
+,  `modified_on` datetime NOT NULL
+,  `candidate_id` integer  DEFAULT NULL
+,  `created_by_user_id` integer  NOT NULL
+,  `modified_by-user_id` integer  NOT NULL
+,  `kind` integer NOT NULL
+,  `extension` varchar(7) NOT NULL
+,  `original_path` varchar(127) NOT NULL
+,  `original_name` varchar(63) NOT NULL
+,  `file_binary` mediumblob NOT NULL
+,  `text_raw` mediumtext NOT NULL
+,  `text_md` mediumtext NOT NULL
+,  `comment` varchar(127) NOT NULL
+,  CONSTRAINT `attachment_ibfk_1` FOREIGN KEY (`created_by_user_id`) REFERENCES `user` (`id`)
+,  CONSTRAINT `attachment_ibfk_2` FOREIGN KEY (`modified_by-user_id`) REFERENCES `user` (`id`)
+,  CONSTRAINT `attachment_ibfk_3` FOREIGN KEY (`candidate_id`) REFERENCES `candidate` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+INSERT INTO `attachment` (`id`, `is_active`, `is_deleted`, `created_on`, `modified_on`, `candidate_id`, `created_by_user_id`, `modified_by-user_id`, `kind`, `extension`, `original_path`, `original_name`, `file_binary`, `text_raw`, `text_md`, `comment`) VALUES
+(1,	1,	0,	'2016-12-30 18:39:26',	'0000-00-00 00:00:00',	2,	1,	1,	0,	'docx',	'/users',	'cv',	'',	'sadasdasd',	'asdasdasd',	'mooi hoor');
+CREATE TABLE `candidate` (
+  `id` integer  NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `created_on` timestamp NOT NULL 
+,  `modified_on` datetime NOT NULL
+,  `is_active` integer  NOT NULL DEFAULT '1'
+,  `is_deleted` integer  NOT NULL DEFAULT '0'
+,  `user_id` integer  DEFAULT NULL
+,  `first_names` varchar(31) NOT NULL DEFAULT 'as in passport'
+,  `birth_year` integer DEFAULT NULL
+,  `birth_month` integer DEFAULT NULL
+,  `birth_day_of_month` integer DEFAULT NULL
+,  `lives_in_region_id` integer  DEFAULT NULL
+,  `wants_work_in_region_id` integer  DEFAULT NULL
+,  `last_job_title` varchar(63) DEFAULT NULL
+,  `introduction` text
+,  `skills` text
+,  `relevant_experience_since` integer  DEFAULT NULL
+,  CONSTRAINT `candidate_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+,  CONSTRAINT `candidate_ibfk_2` FOREIGN KEY (`lives_in_region_id`) REFERENCES `region` (`id`)
+,  CONSTRAINT `candidate_ibfk_3` FOREIGN KEY (`wants_work_in_region_id`) REFERENCES `region` (`id`)
+);
+INSERT INTO `candidate` (`id`, `created_on`, `modified_on`, `is_active`, `is_deleted`, `user_id`, `first_names`, `birth_year`, `birth_month`, `birth_day_of_month`, `lives_in_region_id`, `wants_work_in_region_id`, `last_job_title`, `introduction`, `skills`, `relevant_experience_since`) VALUES
+(2,	'2016-12-21 22:21:05',	'2016-12-21 23:20:41',	1,	0,	1,	'Pieter Willem',	1976,	9,	12,	NULL,	NULL,	'Sr Java Developer',	'asdadsasdsadasdasd',	'java, c++, php, it''ll-prince',	NULL),
+(3,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(4,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(5,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(6,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(7,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(8,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(9,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(10,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
+(11,	'2016-12-21 22:19:34',	'0000-00-00 00:00:00',	1,	0,	NULL,	'as in passport',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL);
+CREATE TABLE `key_value` (
+  `key` varchar(63) NOT NULL
+,  `value` text NOT NULL
+,  `is_active` integer NOT NULL DEFAULT '1'
+,  `is_deleted` integer NOT NULL DEFAULT '0'
+,  `help_text_en` text NOT NULL
+,  `rank` integer NOT NULL DEFAULT '10'
+,  PRIMARY KEY (`key`)
+);
+CREATE TABLE `organisation` (
+  `id` integer  NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `short_code` varchar(15) NOT NULL DEFAULT 'no spaces?'
+,  `full_name` varchar(63) NOT NULL
+,  `kind` varchar(3) NOT NULL DEFAULT 'CL'
+);
+CREATE TABLE `region` (
+  `id` integer  NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `is_active` integer  NOT NULL DEFAULT '1'
+,  `is_deleted` integer  NOT NULL DEFAULT '0'
+,  `path` varchar(63) NOT NULL
+,  `name` varchar(63) NOT NULL
+);
+INSERT INTO `region` (`id`, `is_active`, `is_deleted`, `path`, `name`) VALUES
+(1,	1,	0,	'/',	''),
+(2,	1,	0,	'/',	'Nederland'),
+(3,	1,	0,	'/Nederland/',	'Drenthe');
+CREATE TABLE `roles` (
+  `code` char(1) NOT NULL
+,  `is_active` integer NOT NULL DEFAULT '1'
+,  `is_deleted` integer NOT NULL DEFAULT '0'
+,  `name` varchar(15) NOT NULL
+,  `description` tinytext NOT NULL
+,  `modified_on` datetime NOT NULL
+,  `modified_by_user_id` integer  NOT NULL
+,  `may_create_users_of_roles` varchar(31) NOT NULL
+,  `may_create_candidates` integer NOT NULL DEFAULT '0'
+,  CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`modified_by_user_id`) REFERENCES `user` (`id`)
+);
+INSERT INTO `roles` (`code`, `is_active`, `is_deleted`, `name`, `description`, `modified_on`, `modified_by_user_id`, `may_create_users_of_roles`, `may_create_candidates`) VALUES
+('A',	1,	0,	'Admin',	'admins maintain the database, create users.',	'2016-12-17 16:28:59',	1,	'C, S, R, H, E',	1);
+CREATE TABLE `user` (
+  `id` integer  NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `is_active` integer  NOT NULL
+,  `is_deleted` integer  NOT NULL
+,  `created_on` timestamp NOT NULL 
+,  `modified_on` datetime NOT NULL
+,  `created_by_user_id` integer  NOT NULL
+,  `modified_by_user_id` integer  NOT NULL
+,  `email_address` varchar(63) NOT NULL
+,  `password_bcrypt` char(64) NOT NULL
+,  `short_name` varchar(15) NOT NULL
+,  `last_name` varchar(31) NOT NULL
+,  `gender` char(4) DEFAULT NULL
+,  `telephone_mobile` char(12) DEFAULT NULL
+,  `has_role` char(1) NOT NULL DEFAULT 'U'
+);
+INSERT INTO `user` (`id`, `is_active`, `is_deleted`, `created_on`, `modified_on`, `created_by_user_id`, `modified_by_user_id`, `email_address`, `password_bcrypt`, `short_name`, `last_name`, `gender`, `telephone_mobile`, `has_role`) VALUES
+(1,	0,	0,	'2016-12-17 15:20:17',	'2016-12-17 16:18:24',	0,	0,	'admin@gmail.com',	'qweqweqwe',	'admin',	'n.v.t.',	NULL,	NULL,	'A'),
+(2,	0,	0,	'2016-12-17 15:40:31',	'2016-12-17 16:40:31',	1,	1,	'testkandidaat@gmail.com',	'dasdasdasd',	'Piet',	'Vries, de',	'M',	'+31611329999',	'C');
+CREATE INDEX "idx_candidate_user_id" ON "candidate" (`user_id`);
+CREATE INDEX "idx_candidate_lives_in_region_id" ON "candidate" (`lives_in_region_id`);
+CREATE INDEX "idx_candidate_wants_work_in_region_id" ON "candidate" (`wants_work_in_region_id`);
+CREATE INDEX "idx_roles_modified_by_user_id" ON "roles" (`modified_by_user_id`);
+CREATE INDEX "idx_attachment_created_by_user_id" ON "attachment" (`created_by_user_id`);
+CREATE INDEX "idx_attachment_modified_by-user_id" ON "attachment" (`modified_by-user_id`);
+CREATE INDEX "idx_attachment_candidate_id" ON "attachment" (`candidate_id`);
+END TRANSACTION;

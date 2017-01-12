@@ -1,65 +1,82 @@
 % layout 'default';
 % title 'Process Resume';
-% my $attachment   = stash 'attachment';
-% my $errors = stash 'errors';
+% my $candidate   = stash 'candidate';
+% my $text_md     = stash 'text_md';
+% my $errors      = stash 'errors';
+
+# if this is a GET, init param's by object from storage
+% my @fields = qw/ introduction skills /;
+% foreach (@fields) { param $_  => $candidate->{$_} unless param $_}  ; 
+
 
 <h2>
 %# <%= $msg %>
 </h2>
 
-% if ($attachment) {
-  % param 'kind' => $attachment->kind unless param 'kind';
-  % param 'comment'         => $attachment->comment         unless param 'comment';
-  
 
-	% if (scalar @$errors > 0) {
-	<div class="pure-alert pure-alert-error" >
-	 ERRORS:
-	 <ul>
-	 <li>
-	%== join ("<li>" , @$errors );
-	 </ul>
-	 </div
-    % } 
+ 
 
-%};
+<h2> # <%= $candidate->id %> </h2>
 
-<h2> # <%= $attachment->id %> </h2>
+<table>
+ <col style="width:40%">
+ <col style="width:60%">
 
-
-%= form_for 'upload' => (method => 'post') => (enctype => 'multipart/form-data') => (class => "pure-form pure-form-aligned" ) => begin
+<tr>
+<td style="vertical-align:top;">
+%= form_for 'process' => (method => 'POST') => (class => "pure-form pure-form-aligned" ) => begin
     <fieldset>
     
       <div class="pure-control-group">
-        <label for="name">Soort</label>
-        %= text_field 'kind' => (placeholder => 'soort document') => (size => 50)
+        <label for="name">Voornaam(en)</label>
+        %= text_field 'first_names' => (placeholder => 'als in paspoort') => (size => 40)
       </div>
   
       <div class="pure-control-group">
-        <label for="comment">Notitie</label>
-        %= text_field 'comment' => (placeholder => '\(niet verplicht\)') => (size => 50)
+        <label for="name">Recentste functie</label>
+        %= text_field 'last_job_title' => (placeholder => 'recentste functie') => (size => 40)
       </div>
-
-     <div class="pure-control-group">
-        <label for="comment">Document</label>
-      %= file_field 'doc_upload'
-      </div>
-      
+  
+      <div class="pure-control-group">
+        <label for="name">Skills</label>
+        %= text_area 'skills' => (cols => 40) => (placeholder => 'skills \(komma gescheiden\)')
+      </div>    
       
       
       <div class="pure-control-group">
-          <button type="submit" class="pure-button pure-button-primary">Upload</button>
+        <label for="name">Introductie</label>
+        %= text_area 'introduction' => (cols => 40) => (rows => 10) => (placeholder => 'Korte intro in ik-vorm') 
+      </div>    
+
+      <div class="pure-control-group">
+        <label for="name">Geboorte dag</label>
+        %= number_field 'birth_day_of_month' , placeholder => '1..31' , max => '31', style => 'width: 4em; display: inline;'
       </div>
-      
+      <div>       
+        <label for="name"> maand</label>
+        %= number_field 'birth_month' , placeholder => '1..12' , max => '12' , style => 'width: 4em; display: inline;'
+      </div>
+      <div>  
+        <label for="name"> jaar</label>
+        %= number_field 'birth_year' , placeholder => 'yyyy' , max => '2050', style => 'width: 5em; display: inline;'
+      </div> 
+ 
+      <div class="pure-control-group">
+          <button type="submit" class="pure-button pure-button-primary">Bewaar</button>
+      </div>
       
     </fieldset>
  
- 
- 
-% end   
-% #form
+
+% end
+</td>
+<td style="vertical-align:top;">
+
+<%= $text_md %>
+
+</td>
+</tr>
+</table>
+
 
 <hr>
-created on: <%= $attachment->created_on %> <br>
-modified on : <%= $attachment->created_on %> 
-

@@ -72,7 +72,7 @@ sub upload {
   my @errors = ();
   my $params = $c->req->body_params->to_hash; 
 
-  $attachment = CVDatabase::Model::Attachment->new; or die $!;
+  $attachment = CVDatabase::Model::Attachment->new or die $!;
   $attachment->candidate_id($c->param('cand_id'));
 
   if ($c->req->method eq 'POST') {
@@ -147,13 +147,15 @@ sub upload {
     }  
     
     # Store in new attachment object
-    my $md = do {local $/ = undef;  open my $fh, "<", $file
-        or die "could not open $file: $!"; <$fh>;}
+    my $md = do {local $/ = undef;  open my $fh, "<", $attach_file
+        or die "could not open $attach_file: $!"; <$fh>;};
+        
     $attachment->text_md($md);
+    
     my $attach_id = $attachment->save;
     
     # Redirect to top page
-    $c->redirect_to("/attachment/$attach_id/review");
+    $c->redirect_to("/attachment/$attach_id/process");
   };
 
 RENDER:
@@ -167,6 +169,9 @@ RENDER:
 
   #$self->show();
 } 
+
+
+
 
 sub create_filename {
   
@@ -194,8 +199,30 @@ sub create_filename {
   return $name;
 }
 
+use CVDatabase::Model::Candidate;
 
-sub 
+sub process {
+  my $c = shift;
+  
+  my $attachment_id = $c->param('attach_id');
+  
+  my $attachment = CVDatabase::Model::Attachment->new(id => $attachment_id) or die $!;
+  $attachment->load(with =>['candidate']);
+  
+  my $candidate = CVDatabase::Model::Candidate->new(id => $attachment->candidate_id) or die $!;
+  $candidate->load();
+  
+  # if this is a GET, init param's by object from storage
+  #my @fields = qw/ introduction skills /;
+  #foreach (@fields) { $c->param($_) = $candidate->{$_}}; 
+  
+  my @errors = ();
+  
+  $c->stash( candidate => $candidate, text_md => $attachment->text_md ,  errors => \@errors );
+   
+  $c->show();
+  
+}
 
 
 
